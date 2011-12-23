@@ -14,10 +14,6 @@
 # limitations under the License.
 #
 
-
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
-
 #TODO ---- What do we need to do to not use a static init & init.rc?
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin/init:root/init \
@@ -28,7 +24,11 @@ PRODUCT_COPY_FILES += \
 
 #Add toushcreen config file
 PRODUCT_COPY_FILES += \
-    device/hp/tenderloin/cy8c-touchscreen.idc:system/usr/idc/cy8c-touchscreen.idc
+    device/hp/tenderloin/cy8c-touchscreen.idc:system/usr/idc/cy8c-touchscreen.idc \
+    device/hp/tenderloin/pmic8058_pwrkey.idc:system/usr/idc/pmic8058_pwrkey.idc \
+    device/hp/tenderloin/pmic8058_pwrkey.kl:system/usr/idc/pmic8058_pwrkey.kl \
+    device/hp/tenderloin/gpio-keys.idc:system/usr/idc/gpio-keys.idc
+
 
 ## (2) Also get non-open-source GSM-specific aspects if available
 $(call inherit-product-if-exists, vendor/hp/tenderloin/tenderloin-vendor.mk)
@@ -67,6 +67,14 @@ PRODUCT_PACKAGES += \
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
+##Disable HWAccel for now & set ldc_density
+ADDITIONAL_BUILD_PROPERTIES += \
+    ro.config.disable_hw_accel=true \
+    ro.sf.lcd_density=160
+
+PRODUCT_AAPT_CONFIG := normal mdpi
+PRODUCT_AAPT_PREF_CONFIG := mdpi
+PRODUCT_CHARACTERISTICS := tablet
 
 PRODUCT_LOCALES += en
 
