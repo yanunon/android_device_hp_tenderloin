@@ -1,9 +1,4 @@
-#<<<<<<< HEAD
-#key 115   VOLUME_UP         WAKE
-#key 114   VOLUME_DOWN       WAKE
-#key 232   HOME             WAKE_DROPPED
-#=======
-# GPIO key layout mapping for HP Touchpad (tenderloin).
+# Makefile for ts_srv userspace input driver for HP Touchpad.
 # Copyright (C) 2012 Wong Yong Jie
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-key 114   VOLUME_DOWN      WAKE_DROPPED
-key 115   VOLUME_UP        WAKE_DROPPED
-key 232   HOME             WAKE
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
 
-#>>>>>>> yjwong-ics
+LOCAL_MODULE := ts_srv
+LOCAL_MODULE_TAGS := optional
+
+LOCAL_C_INCLUDES := \
+	bionic/libc/kernel/common \
+	bionic/libc/kernel/arch-arm
+
+LOCAL_SRC_FILES := ts_srv.c
+
+include $(BUILD_EXECUTABLE)

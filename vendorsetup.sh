@@ -14,5 +14,6 @@
 # limitations under the License.
 #
 
-add_lunch_combo full_tenderloin-userdebug
 add_lunch_combo full_tenderloin-eng
+add_lunch_combo full_tenderloin-userdebug
+add_lunch_combo full_tenderloin-user

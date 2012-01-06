@@ -22,7 +22,7 @@ PRODUCT_COPY_FILES += \
     device/hp/tenderloin/init.tenderloin.rc:root/init.tenderloin.rc \
     device/hp/tenderloin/ueventd.tenderloin.rc:root/ueventd.tenderloin.rc
 
-#Add toushcreen config file
+# Add toushcreen config file
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin/cy8c-touchscreen.idc:system/usr/idc/cy8c-touchscreen.idc \
     device/hp/tenderloin/pmic8058_pwrkey.idc:system/usr/idc/pmic8058_pwrkey.idc \
@@ -32,8 +32,6 @@ PRODUCT_COPY_FILES += \
 
 ## (2) Also get non-open-source GSM-specific aspects if available
 $(call inherit-product-if-exists, vendor/hp/tenderloin/tenderloin-vendor.mk)
-
-DEVICE_PACKAGE_OVERLAYS += device/hp/tenderloin/overlay
 
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
@@ -49,6 +47,7 @@ PRODUCT_PACKAGES += \
     librs_jni \
     libOmxVenc \
     libOmxVdec \
+    hwcomposer.default \
     com.android.future.usb.accessory
 #    librs_jni \
 #    gralloc.msm8660 \
@@ -57,9 +56,12 @@ PRODUCT_PACKAGES += \
 #    libOmxCore \
 #    libaudio \
 
+# We use the default hwcomposer for now.
 
 # Keylayouts
-#PRODUCT_COPY_FILES += \
+PRODUCT_COPY_FILES += \
+    device/hp/tenderloin/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
+    device/hp/tenderloin/keylayout/pmic8058_pwrkey.kl:system/usr/keylayout/pmic8058_pwrkey.kl
 
 # Kernel modules
 #PRODUCT_COPY_FILES += \
@@ -67,17 +69,19 @@ PRODUCT_PACKAGES += \
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
+#<<<<<<< HEAD
 ##Disable HWAccel for now & set ldc_density
-ADDITIONAL_BUILD_PROPERTIES += \
+#ADDITIONAL_BUILD_PROPERTIES += \
     ro.config.disable_hw_accel=true \
     ro.sf.lcd_density=160
 
-PRODUCT_AAPT_CONFIG := normal mdpi
-PRODUCT_AAPT_PREF_CONFIG := mdpi
-PRODUCT_CHARACTERISTICS := tablet
+#PRODUCT_AAPT_CONFIG := normal mdpi
+#PRODUCT_AAPT_PREF_CONFIG := mdpi
+#PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_LOCALES += en
+#PRODUCT_LOCALES += en
 
+#=======
 PRODUCT_COPY_FILES += \
     device/hp/tenderloin/vold.fstab:system/etc/vold.fstab
 
@@ -90,6 +94,9 @@ ifeq ($(TARGET_PREBUILT_KERNEL),)
 else
 	LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
+
+# Product property overrides.
+PRODUCT_PROPERTY_OVERRIDES += ro.config.disable_hw_accel=true
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
