@@ -1,8 +1,3 @@
-#<<<<<<< HEAD
-#key 115   VOLUME_UP         WAKE
-#key 114   VOLUME_DOWN       WAKE
-#key 232   HOME             WAKE_DROPPED
-#=======
 # GPIO key layout mapping for HP Touchpad (tenderloin).
 # Copyright (C) 2012 Wong Yong Jie
 #
@@ -22,4 +17,3 @@ key 114   VOLUME_DOWN      WAKE_DROPPED
 key 115   VOLUME_UP        WAKE_DROPPED
 key 232   HOME             WAKE
 
-#>>>>>>> yjwong-ics

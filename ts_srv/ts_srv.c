@@ -296,12 +296,7 @@ void calc_point()
 		for (j = 0; j < 40; j++)
 		{
 #if RAW_DATA_DEBUG
-            if(matrix[i][j] > 1)
-            {
-			    printf("%s ", "**");
-			}else{
-			    printf("%s ", "++");
-			}
+			printf("%2.2X ", matrix[i][j]);
 #endif
 			if (matrix[i][j] > 32 && clc < MAX_CLIST)
 			{
@@ -409,8 +404,8 @@ void calc_point()
 			//xval = avgi * 768 / 29;
 			yval = 768 - avgi * 768 / 29;
 			xval = 1024 - avgj * 1024 / 39;
-			int xval_final = abs((768 - yval) * 1.33);
-			int yval_final = abs(xval * 0.752);
+			int xval_final = (768 - yval) * 1.33;
+			int yval_final = xval * 0.752;
 #endif
 
 #if SEND_TRACK
