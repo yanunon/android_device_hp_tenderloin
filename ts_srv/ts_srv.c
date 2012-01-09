@@ -55,14 +55,14 @@
 #endif
 
 /* Set to 1 to print coordinates to stdout. */
-#define DEBUG 1
-#define DEBUGMORE 1
+#define DEBUG 0
+#define DEBUGMORE 0
 #define SEND_TRACK 0
 
 #define INVERTXY 0
 
 /* Set to 1 to see raw data from the driver */
-#define RAW_DATA_DEBUG 1
+#define RAW_DATA_DEBUG 0
 
 #define WANT_MULTITOUCH 1
 #define WANT_SINGLETOUCH 0
@@ -228,8 +228,18 @@ int send_uevent(int fd, __u16 type, __u16 code, __s32 value)
 	event.type = type;
 	event.code = code;
 	event.value = value;
+	
+#ifdef HAVE_POSIX_CLOCKS
+    struct timespec t;
+    t.tv_sec = t.tv_nsec = 0;
+    clock_gettime(1, &t);
+    event.time.tv_sec = t.tv_sec;
+    event.time.tv_usec = t.tv_nsec/1000;
+    fprintf(stderr, "HAVE_POSIX_CLOCKS\n");
+#else
 	gettimeofday(&event.time, NULL);
-
+#endif
+    fprintf(stderr, "event time:%lld, clock:%lld\n", event.time.tv_sec*1000000000LL +  event.time.tv_usec*1000LL, t.tv_sec*1000000000LL + t.tv_nsec);
 	if (write(fd, &event, sizeof(event)) != sizeof(event))
 	{
 		fprintf(stderr, "Error on send_event %d", sizeof(event));
@@ -286,7 +296,12 @@ void calc_point()
 		for (j = 0; j < 40; j++)
 		{
 #if RAW_DATA_DEBUG
-			printf("%2.2X ", matrix[i][j]);
+            if(matrix[i][j] > 1)
+            {
+			    printf("%s ", "**");
+			}else{
+			    printf("%s ", "++");
+			}
 #endif
 			if (matrix[i][j] > 32 && clc < MAX_CLIST)
 			{
@@ -394,8 +409,8 @@ void calc_point()
 			//xval = avgi * 768 / 29;
 			yval = 768 - avgi * 768 / 29;
 			xval = 1024 - avgj * 1024 / 39;
-			int xval_final = (768 - yval) * 1.33;
-			int yval_final = xval * 0.752;
+			int xval_final = abs((768 - yval) * 1.33);
+			int yval_final = abs(xval * 0.752);
 #endif
 
 #if SEND_TRACK
@@ -411,8 +426,8 @@ void calc_point()
 			send_uevent(uinput_fd, EV_SYN, SYN_MT_REPORT, 0);
 
 #if DEBUG
-			printf("Coords %d %lf, %lf, %lf, %lf, %d\n",
-					tpc, avgi, avgj, xval, yval, tweight);
+			printf("Coords %d %lf, %lf, %lf, %lf, %d, %d, %d\n",
+					tpc, avgi, avgj, xval, yval, xval_final, yval_final, tweight);
 #endif
 
 		}
