@@ -105,3 +105,6 @@ PRODUCT_COPY_FILES += \
 
 # This is a tablet.
 PRODUCT_CHARACTERISTICS := tablet
+
+#DEFAULT_PROPERTIES
+ADDITIONAL_DEFAULT_PROPERTIES += persist.service.adb.enable=1

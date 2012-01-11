@@ -433,7 +433,8 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
-  #script.WriteRawImage("/boot", "boot.img")
+  script.Mount("/boot")
+  script.WriteFile("/boot", "/uImage.ICS", "boot.img")
   # Don't do this as we will obliterate uboot.
 
   script.ShowProgress(0.1, 0)
